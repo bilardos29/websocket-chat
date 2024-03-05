@@ -10,10 +10,10 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'channel_state_provider.dart';
 
 final channelHandler = StateNotifierProvider.autoDispose
-    .family<ChannelNotifier, Resource<WebSocketChannel>, RoomModel>(
-        (ref, room) {
+    .family<ChannelNotifier, Resource<WebSocketChannel>, GroupModel>(
+        (ref, group) {
   final channelNotifier =
-      ChannelNotifier(ChatHandler(ref.read(localDataProvider), room: room));
+      ChannelNotifier(ChatHandler(ref.read(localDataProvider), group: group));
 
   ref.onDispose(() {
     channelNotifier.close();

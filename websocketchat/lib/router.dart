@@ -2,9 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:shared/shared.dart';
 
 import 'feature_chat/chats.dart';
-import 'feature_room/rooms.dart';
+import 'feature_group/group.dart';
 
-import 'feature_room/ui/routes/room_routes.dart';
+import 'feature_group/ui/routes/group_routes.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -15,14 +15,14 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/join-room',
-      builder: (context, state) => const JoinRoomRoute(),
+      builder: (context, state) => const JoinGroupRoute(),
     ),
     GoRoute(
         path: '/create-room',
-        builder: (context, state) => const CreateRoomRoute()),
+        builder: (context, state) => const CreateGroupRoute()),
     GoRoute(
       path: '/chats',
-      builder: (context, state) => Chats(room: state.extra as RoomModel),
+      builder: (context, state) => Chats(group: state.extra as GroupModel),
     ),
   ],
 );

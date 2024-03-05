@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared/shared.dart';
 
-import '../../context/room_context.dart';
-import 'room_model_viewer.dart';
+import '../../context/group_context.dart';
+import 'group_model_viewer.dart';
 
 class JoinRoomDialog extends ConsumerStatefulWidget {
   final String roomId;
@@ -18,7 +18,7 @@ class JoinRoomDialog extends ConsumerStatefulWidget {
 }
 
 class _JoinRoomDialogState extends ConsumerState<JoinRoomDialog> {
-  RoomModel? roomModel;
+  GroupModel? roomModel;
 
   void _onJoin() => context.push("/chats", extra: roomModel);
 
@@ -40,10 +40,10 @@ class _JoinRoomDialogState extends ConsumerState<JoinRoomDialog> {
       ),
       content: ref.watch(checkRoomStateProvider(widget.roomId)).when(
             success: (data, message) {
-              if (roomModel == null && data?.state == RoomState.joinable) {
+              if (roomModel == null && data?.state == GroupState.joinable) {
                 roomModel = data?.room;
               }
-              return RoomModelViewer(roomModel: data!);
+              return GroupModelViewer(groupModel: data!);
             },
             failed: (message, err, data) => Text(message),
             loading: (__, _) => Row(

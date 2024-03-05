@@ -18,14 +18,14 @@ class ChatRepoImpl implements ChatRepository {
   }
 
   @override
-  Future<void> sendMessage(String message, RoomModel room) async {
+  Future<void> sendMessage(String message, GroupModel group) async {
     final username = await _storage.getUsername();
 
     final model = ChatModel(
-      room: room.roomId,
+      group: group.groupId,
       username: username ?? 'anonymous',
-      text: message,
-      time: DateTime.now(),
+      chatData: message,
+      chatTime: DateTime.now(),
     );
     _handler.sink.add(WsBaseMessages.message(model, owner: ChatOwner.client));
   }

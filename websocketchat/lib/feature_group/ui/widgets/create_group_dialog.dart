@@ -7,24 +7,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../context/context.dart';
 import './widgets.dart';
 
-class CreateRoomDialog extends ConsumerStatefulWidget {
+class CreateGroupDialog extends ConsumerStatefulWidget {
   final int maxCount;
-  const CreateRoomDialog({super.key, required this.maxCount});
+  const CreateGroupDialog({super.key, required this.maxCount});
 
   @override
-  ConsumerState<CreateRoomDialog> createState() => _CreateRoomDialogState();
+  ConsumerState<CreateGroupDialog> createState() => _CreateGroupDialogState();
 }
 
-class _CreateRoomDialogState extends ConsumerState<CreateRoomDialog> {
-  RoomModel? _roomModel;
+class _CreateGroupDialogState extends ConsumerState<CreateGroupDialog> {
+  GroupModel? _groupModel;
   void _setClipBoardData({required String data}) async {
     await Clipboard.setData(ClipboardData(text: data));
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${_roomModel?.roomId} copied to clipboard')));
+        SnackBar(content: Text('${_groupModel?.groupId} copied to clipboard')));
   }
 
-  void _onJoin() => context.push("/chats", extra: _roomModel);
+  void _onJoin() => context.push("/chats", extra: _groupModel);
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +32,12 @@ class _CreateRoomDialogState extends ConsumerState<CreateRoomDialog> {
       actionsAlignment: MainAxisAlignment.center,
       titleTextStyle: Theme.of(context).textTheme.headlineSmall,
       title: const Text("Creating chat room "),
-      content: ref.watch(createRoomStateProvider(widget.maxCount)).when(
+      content: ref.watch(createGroupStateProvider(widget.maxCount)).when(
             success: (data, _) {
-              _roomModel = data;
-              return CreateRoomViewer(
+              _groupModel = data;
+              return CreateGroupViewer(
                 data: data,
-                onCopy: () => _setClipBoardData(data: data.roomId),
+                onCopy: () => _setClipBoardData(data: data.groupId),
               );
             },
             failed: (message, _, __) => Text(message),
@@ -54,7 +54,7 @@ class _CreateRoomDialogState extends ConsumerState<CreateRoomDialog> {
       actions: [
         Builder(builder: (context) {
           final roomProvider = ref
-              .watch(createRoomStateProvider(widget.maxCount).notifier)
+              .watch(createGroupStateProvider(widget.maxCount).notifier)
               .joinRoomNotifier;
           return TextButton(
             onPressed: roomProvider.allowed ? _onJoin : null,

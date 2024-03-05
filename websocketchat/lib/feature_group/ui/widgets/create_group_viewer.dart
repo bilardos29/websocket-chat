@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
-class CreateRoomViewer extends StatelessWidget {
+class CreateGroupViewer extends StatelessWidget {
   final void Function()? onCopy;
-  final RoomModel data;
-  const CreateRoomViewer({Key? key, this.onCopy, required this.data})
+  final GroupModel data;
+  const CreateGroupViewer({Key? key, this.onCopy, required this.data})
       : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class CreateRoomViewer extends StatelessWidget {
                   children: [
                     // const SizedBox.shrink(),
                     Text(
-                      data.roomId,
+                      data.groupName,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ class CreateRoomViewer extends StatelessWidget {
                     ),
               ),
               Text(
-                "Total Attendes :${data.maxAttendes}",
+                "Total Attendes :${data.totalUser}",
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.w600,

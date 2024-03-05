@@ -8,8 +8,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'ui/widgets/chats_widgets.dart';
 
 class Chats extends ConsumerStatefulWidget {
-  final RoomModel room;
-  const Chats({super.key, required this.room});
+  final GroupModel group;
+  const Chats({super.key, required this.group});
 
   @override
   ConsumerState<Chats> createState() => _ChatsState();
@@ -23,7 +23,7 @@ class _ChatsState extends ConsumerState<Chats> {
       _controller.animateTo(_controller.position.maxScrollExtent,
           duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
     }
-    ref.read(chatRepoProvider(channel)).sendMessage(value, widget.room);
+    ref.read(chatRepoProvider(channel)).sendMessage(value, widget.group);
   }
 
   @override
@@ -42,10 +42,10 @@ class _ChatsState extends ConsumerState<Chats> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: ref.watch(channelHandler(widget.room)).when(
+      body: ref.watch(channelHandler(widget.group)).when(
             success: (channel, _) => UserChatsWindow(
               channel: channel,
-              room: widget.room,
+              group: widget.group,
               scroll: _controller,
             ),
             failed: (message, _, __) => const Center(
@@ -55,7 +55,7 @@ class _ChatsState extends ConsumerState<Chats> {
               child: Text('Loading your connection'),
             ),
           ),
-      bottomNavigationBar: ref.watch(channelHandler(widget.room)).maybeWhen(
+      bottomNavigationBar: ref.watch(channelHandler(widget.group)).maybeWhen(
             orElse: () => null,
             success: (channel, _) =>
                 ChatBottomBar(onSend: (str) => _onSend(str, channel)),

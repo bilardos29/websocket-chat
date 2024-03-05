@@ -87,7 +87,7 @@ class _AnimtedChatBubbleState extends State<AnimatedChatBubble>
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        widget.chatInfo.model?.text ?? '',
+                        widget.chatInfo.model?.chatData ?? '',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
                               color: widget.chatInfo.owner == ChatOwner.self
                                   ? Theme.of(context)
@@ -103,7 +103,7 @@ class _AnimtedChatBubbleState extends State<AnimatedChatBubble>
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Text(
-                          widget.chatInfo.model!.time.simpleFormat,
+                          widget.chatInfo.model!.chatTime.simpleFormat,
                           style: Theme.of(context)
                               .textTheme
                               .labelSmall

@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared/shared.dart';
 
 import '../../utils.dart';
 
-class RoomApi {
+class GroupApi {
   static final _endpoint = 'http://192.168.23.202:8080';
 
   static final _dio = Dio(
@@ -19,32 +18,31 @@ class RoomApi {
     ),
   );
 
-  Future<RoomDto> createRoom(int max) async {
+  Future<GroupDto> createGroup(int max) async {
     Response resp = await _dio.post(
-      '/create_room',
+      '/create_group',
       data: jsonEncode(<String, int>{"max": max}),
     );
-    return RoomDto.fromJson(resp.data);
+    return GroupDto.fromJson(resp.data);
   }
 
-  Future<CheckRoomDto> checkRoom(String room) async {
+  Future<CheckGroupDto> checkGroup(String room) async {
     Response resp = await _dio.post(
-      '/check_room',
-      data: jsonEncode(<String, String>{"roomId": room}),
+      '/check_group',
+      data: jsonEncode(<String, String>{"groupId": room}),
     );
-    print("berhasil checkroom $resp");
-    return CheckRoomDto.fromJson(resp.data);
+    print("berhasil check group $resp");
+    return CheckGroupDto.fromJson(resp.data);
   }
 
-  Future<List<RoomDto>> getAllRoom() async {
+  Future<List<GroupDto>> getAllRoom() async {
     Response resp = await _dio.post(
-      '/get_all_room',
+      '/get_all_group',
     );
 
-    return List<RoomDto>.from(json.decode(resp.data)
-        .map((data) {
-          RoomDto item = RoomDto.fromJson(data);
-          return item;
-        }));
+    return List<GroupDto>.from(json.decode(resp.data).map((data) {
+      GroupDto item = GroupDto.fromJson(data);
+      return item;
+    }));
   }
 }

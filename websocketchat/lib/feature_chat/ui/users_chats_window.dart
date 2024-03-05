@@ -12,10 +12,10 @@ import 'user_chats.dart';
 class UserChatsWindow extends ConsumerWidget {
   final WebSocketChannel channel;
   final ScrollController scroll;
-  final RoomModel room;
+  final GroupModel group;
   const UserChatsWindow({
     super.key,
-    required this.room,
+    required this.group,
     required this.channel,
     required this.scroll,
   });
@@ -40,7 +40,7 @@ class UserChatsWindow extends ConsumerWidget {
                 text: 'Chat room :',
                 children: [
                   TextSpan(
-                    text: room.roomId,
+                    text: group.groupName,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: Theme.of(context).colorScheme.primary,

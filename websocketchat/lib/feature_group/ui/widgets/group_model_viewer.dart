@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
 
-class RoomModelViewer extends StatelessWidget {
-  final CheckRoomModel roomModel;
-  const RoomModelViewer({super.key, required this.roomModel});
+class GroupModelViewer extends StatelessWidget {
+  final CheckGroupModel groupModel;
+  const GroupModelViewer({super.key, required this.groupModel});
 
   String get typeToString {
-    switch (roomModel.state) {
-      case RoomState.full:
+    switch (groupModel.state) {
+      case GroupState.full:
         return "ROOM FULL";
-      case RoomState.joinable:
+      case GroupState.joinable:
         return "ROOM JOINABLE";
-      case RoomState.undefined:
+      case GroupState.undefined:
         return "ROOM NOT FOUND";
     }
   }
@@ -25,7 +25,7 @@ class RoomModelViewer extends StatelessWidget {
           typeToString,
           style: Theme.of(context).textTheme.labelLarge,
         ),
-        if (roomModel.state == RoomState.undefined) ...[
+        if (groupModel.state == GroupState.undefined) ...[
           const SizedBox(height: 2),
           Text(
             'Room dont exists create a new one ',
@@ -33,7 +33,7 @@ class RoomModelViewer extends StatelessWidget {
           )
         ],
         const SizedBox(height: 10),
-        if (roomModel.room != null)
+        if (groupModel.room != null)
           Container(
             width: double.maxFinite,
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -45,8 +45,8 @@ class RoomModelViewer extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Joined: ${roomModel.room!.count}"),
-                  Text("Maximum: ${roomModel.room!.maxAttendes}")
+                  Text("Joined: ${groupModel.room!.totalUser}"),
+                  Text("Maximum: ${groupModel.room!.totalUser}")
                 ],
               ),
             ),

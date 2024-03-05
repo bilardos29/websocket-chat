@@ -3,16 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:websocketchat/core/local_data_repo.dart';
 
 import '../../../core/local_store_context.dart';
-import '../widgets/create_room_dialog.dart';
+import '../widgets/create_group_dialog.dart';
 
-class CreateRoomRoute extends ConsumerStatefulWidget {
-  const CreateRoomRoute({Key? key}) : super(key: key);
+class CreateGroupRoute extends ConsumerStatefulWidget {
+  const CreateGroupRoute({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<CreateRoomRoute> createState() => _CreateRoomRouteState();
+  ConsumerState<CreateGroupRoute> createState() => _CreateGroupRouteState();
 }
 
-class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
+class _CreateGroupRouteState extends ConsumerState<CreateGroupRoute> {
   late TextEditingController _maxAttendesCount;
   late TextEditingController _usernameField;
   late LocalDataRepo _repo;
@@ -51,7 +51,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
     await showDialog(
       context: context,
       builder: (context) =>
-          CreateRoomDialog(maxCount: int.parse(_maxAttendesCount.text)),
+          CreateGroupDialog(maxCount: int.parse(_maxAttendesCount.text)),
     );
   }
 
@@ -59,7 +59,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create Room"),
+        title: const Text("Create Group"),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
       ),
@@ -71,7 +71,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
             children: [
               const SizedBox(height: 10),
               Text(
-                "Create a roomID",
+                "Create a groupID",
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
@@ -79,7 +79,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
               ),
               const SizedBox(height: 8),
               Text(
-                "Created a room Id that can be used by other to join to this room",
+                "Created a group Id that can be used by other to join to this room",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall,
               ),

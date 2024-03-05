@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class RoomJoinNotifier extends ChangeNotifier {
+class GroupJoinNotifier extends ChangeNotifier {
   bool _isJoinAllowed = false;
 
   bool get allowed => _isJoinAllowed;
