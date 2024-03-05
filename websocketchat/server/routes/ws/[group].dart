@@ -6,17 +6,17 @@ import 'package:shared/shared.dart';
 import '../../main.dart';
 
 /// This hold the list of [WebSocketChannel]
-/// Though this is just a `in-memory mapping` [Map] hoding th [String] room with
+/// Though this is just a `in-memory mapping` [Map] hoding th [String] group with
 /// the [List] of [WebSocketChannel]s
 /// The similar thing can be applied with pubsub feature of the redis server
 /// for a long running and traffic based application
-final Map<String, List<WebSocketChannel>> _channelsRoom = {};
+final Map<String, List<WebSocketChannel>> _channelsGroup = {};
 
-Future<Response> onRequest(RequestContext context, String room) async {
-  logger.shout(_channelsRoom);
+Future<Response> onRequest(RequestContext context, String group) async {
+  logger.shout(_channelsGroup);
   //room validation
-  final roomRepo = context.read<RoomOperations>();
-  final roomValidation = await roomRepo.checkRoom(room: room);
+  final groupRepo = context.read<GroupOperations>();
+  final groupValidation = await groupRepo.checkGroup(group: group);
 
   final query = context.request.uri.queryParameters;
   final chatRepo = context.read<ChatOperationRepo>();
@@ -24,10 +24,10 @@ Future<Response> onRequest(RequestContext context, String room) async {
   final handler = webSocketHandler(
     (channel, protocol) async {
       // Room State validation
-      if (roomValidation.state != RoomState.joinable) {
+      if (groupValidation.state != GroupState.joinable) {
         await channel.sink.close(
           WsCloseCodes.mandatoryExtensionNotFound.closeCode,
-          'Room is not joinable',
+          'Group is not joinable',
         );
         return;
       }
@@ -42,20 +42,20 @@ Future<Response> onRequest(RequestContext context, String room) async {
       final username = query['username']!;
 
       // Updating the `_channelsRoom` as per the join sequence
-      if (_channelsRoom.containsKey(room)) {
-        _channelsRoom.update(room, (value) => value..add(channel));
+      if (_channelsGroup.containsKey(group)) {
+        _channelsGroup.update(group, (value) => value..add(channel));
       } else {
-        _channelsRoom.putIfAbsent(room, () => [channel]);
+        _channelsGroup.putIfAbsent(group, () => [channel]);
       }
-      if (_channelsRoom[room]?.length != null) {
-        await roomRepo.updateRoom(
-          room: room,
-          newCount: _channelsRoom[room]!.length,
+      if (_channelsGroup[group]?.length != null) {
+        await groupRepo.updateGroup(
+          groupId: group,
+          totalUser: _channelsGroup[group]!.length,
         );
       }
       //send all the previous chats stored in mongodb database
       await channel.sink.addStream(
-        chatRepo.streamChats(room: room).asyncMap(
+        chatRepo.streamChats(group: group).asyncMap(
               (chat) => WsBaseMessages.message(
                 chat,
                 owner: chat.username == username
@@ -66,16 +66,16 @@ Future<Response> onRequest(RequestContext context, String room) async {
       );
 
       //welcome message to the stream
-      _channelsRoom[room]?.forEach(
+      _channelsGroup[group]?.forEach(
         (others) => others.sink.add(WsBaseMessages.joined(username)),
       );
 
       channel.stream.listen(
         (event) async {
           // Get all the associated sockets [WebSocketChannel] present
-          // with the same room then channelize through all the sockets
+          // with the same group then channelize through all the sockets
           // not brodcasting it (sending to all sockets except the channel )
-          final sockets = _channelsRoom[room];
+          final sockets = _channelsGroup[group];
 
           try {
             final message = WsBaseMessages.parseMessage(event as String);
@@ -107,9 +107,9 @@ Future<Response> onRequest(RequestContext context, String room) async {
         },
         onDone: () async {
           logger.fine('closed the stream');
-          _channelsRoom.update(room, (value) => value..remove(channel));
+          _channelsGroup.update(group, (value) => value..remove(channel));
 
-          _channelsRoom[room]?.forEach(
+          _channelsGroup[group]?.forEach(
             (others) => others.sink.add(
               WsBaseMessages.dissconnected(
                 username,
@@ -117,15 +117,15 @@ Future<Response> onRequest(RequestContext context, String room) async {
               ),
             ),
           );
-          await roomRepo.updateRoom(
-            room: room,
-            newCount: _channelsRoom[room]?.length ?? 0,
+          await groupRepo.updateGroup(
+            groupId: group,
+            totalUser: _channelsGroup[group]?.length ?? 0,
           );
         },
         onError: (_) async {
           logger.shout('some error occured !!');
-          _channelsRoom.update(room, (value) => value..remove(channel));
-          _channelsRoom[room]?.forEach(
+          _channelsGroup.update(group, (value) => value..remove(channel));
+          _channelsGroup[group]?.forEach(
             (others) => others.sink.add(
               WsBaseMessages.dissconnected(
                 username,
@@ -133,9 +133,9 @@ Future<Response> onRequest(RequestContext context, String room) async {
               ),
             ),
           );
-          await roomRepo.updateRoom(
-            room: room,
-            newCount: _channelsRoom[room]?.length ?? 0,
+          await groupRepo.updateGroup(
+            groupId: group,
+            totalUser: _channelsGroup[group]?.length ?? 0,
           );
         },
         cancelOnError: true,

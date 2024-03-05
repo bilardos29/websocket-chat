@@ -14,13 +14,13 @@ Future<Response> onRequest(RequestContext context) async {
   if (data is! Map<String, dynamic>) {
     return ApiException.failedDependency(details: 'Invalid format');
   }
-  final key = data.containsKey('roomId');
+  final key = data.containsKey('userId');
   if (!key) {
-    return ApiException.failedDependency(details: 'Room id is not provided');
+    return ApiException.failedDependency(details: 'User Id is not provided');
   }
-  final roomId = data['roomId'] as String;
+  final userId = data['userId'] as String;
 
-  final check = await context.read<RoomOperations>().checkRoom(room: roomId);
+  final check = await context.read<UserOperations>().checkUser(userId: userId);
 
-  return Response.json(body: CheckRoomDto.fromModel(check).toJson());
+  return Response.json(body: CheckUserDto.fromModel(check).toJson());
 }

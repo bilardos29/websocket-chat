@@ -9,21 +9,21 @@ part 'chat_dto.g.dart';
 class ChatDto {
   @JsonKey(name: '_id')
   final String? id;
-  @JsonKey(name: "room")
-  final String room;
+  @JsonKey(name: "group")
+  final String group;
   @JsonKey(name: "username")
   final String username;
-  @JsonKey(name: "text")
-  final String text;
-  @JsonKey(name: "time")
-  final DateTime time;
+  @JsonKey(name: "chatData")
+  final String chatData;
+  @JsonKey(name: "chatTime")
+  final DateTime chatTime;
 
   ChatDto({
     this.id,
-    required this.room,
+    required this.group,
     required this.username,
-    required this.text,
-    required this.time,
+    required this.chatData,
+    required this.chatTime,
   });
 
   factory ChatDto.fromJson(Map<String, dynamic> json) =>
@@ -32,37 +32,37 @@ class ChatDto {
   factory ChatDto.fromModel(ChatModel model) => ChatDto(
         id: model.id,
         username: model.username,
-        text: model.text,
-        time: model.time,
-        room: model.room,
+        chatData: model.chatData,
+        chatTime: model.chatTime,
+        group: model.group,
       );
 
   factory ChatDto.fromEntity(MongoChatEntity entity) => ChatDto(
         id: entity.id.$oid,
-        room: entity.room,
+        group: entity.group,
         username: entity.username,
-        text: entity.text,
-        time: entity.time,
+        chatData: entity.chatData,
+        chatTime: entity.chatTime,
       );
 
   Map<String, dynamic> toJson() => _$ChatDtoToJson(this);
 
   ChatModel toModel() => ChatModel(
         id: id,
-        room: room,
+        group: group,
         username: username,
-        text: text,
-        time: time,
+        chatData: chatData,
+        chatTime: chatTime,
       );
 
   MongoChatEntity toEntity() {
     assert(id != null, "THE ID OF AN MONOGO ENTITY OBJECT CANNOT BE NULL");
     return MongoChatEntity(
       id: ObjectId.fromHexString(id!),
-      room: room,
+      group: group,
       username: username,
-      text: text,
-      time: time,
+      chatData: chatData,
+      chatTime: chatTime,
     );
   }
 }

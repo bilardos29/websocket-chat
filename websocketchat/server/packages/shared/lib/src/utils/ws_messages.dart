@@ -11,7 +11,7 @@ class WsBaseMessages {
         ChatMessageInfoModel(
           owner: ChatOwner.server,
           type: ChatMessageDataType.joined,
-          extra: '$username joined the room',
+          extra: '$username joined the group',
         ),
       ).toJson());
 

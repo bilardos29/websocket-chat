@@ -8,17 +8,17 @@ part 'mongo_chat_entity.g.dart';
 
 @JsonSerializable(converters: [ObjectIdConvertor()])
 class MongoChatEntity extends BaseEntity {
-  final String room;
+  final String group;
   final String username;
-  final String text;
-  final DateTime time;
+  final String chatData;
+  final DateTime chatTime;
 
   MongoChatEntity({
     required super.id,
-    required this.room,
+    required this.group,
     required this.username,
-    required this.text,
-    required this.time,
+    required this.chatData,
+    required this.chatTime,
   });
 
   factory MongoChatEntity.fromJson(Map<String, dynamic> json) =>

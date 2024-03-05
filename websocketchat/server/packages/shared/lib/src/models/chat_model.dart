@@ -6,9 +6,9 @@ part 'chat_model.freezed.dart';
 class ChatModel with _$ChatModel {
   factory ChatModel({
     String? id,
-    required String room,
+    required String group,
     required String username,
-    required String text,
-    required DateTime time,
+    required String chatData,
+    required DateTime chatTime,
   }) = _ChatModel;
 }
